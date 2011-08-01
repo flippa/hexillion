@@ -100,7 +100,7 @@ module Hexillion
           if nodes.size == 1
             result[attr] = nodes[0].content unless nodes[0].content == ''
           else
-            result[attr] = nodes.to_a.join("\n")
+            result[attr] = nodes.to_a.reject { |s| s.blank? }.join("\n")
           end
         end
         
