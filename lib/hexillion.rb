@@ -30,13 +30,14 @@ module Hexillion
     
     def parse_xml(xml)
       doc = Nokogiri::XML(xml)
-      records = doc.xpath(".//QueryResult[ErrorCode='Success']/WhoisRecord")
+      records = doc.xpath(".//QueryResult[ErrorCode='Success' and FoundMatch='Yes']/WhoisRecord")
   
       strings = {
         :registrant_name => "Registrant Name",
         :registrant_person => "Registrant Person",
         :registrant_handle => "Registrant Handle",
         :registrant_address => "Registrant Address",
+        :registrant_city => "Registrant City",
         :registrant_state_province => "Registrant StateProvince",
         :registrant_postal_code => "Registrant PostalCode",
         :registrant_country => "Registrant Country",
