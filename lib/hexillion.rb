@@ -7,7 +7,11 @@ module Hexillion
     def initialize(options)
       response = RestClient.post "https://hexillion.com/rf/xml/1.0/auth/", :username => options[:username], :password => options[:password]
       doc = Nokogiri::XML(response)
-      @session_key = doc.at_css('SessionKey').content
+      begin
+        @session_key = doc.at_css('SessionKey').content
+      rescue
+        raise "Authentication failed"
+      end
     end
     
     # Query the API for a given domain
