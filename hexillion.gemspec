@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{Provides a simple client for the Hexillion API}
   gem.homepage      = ''
   
-  gem.add_dependency "rest_client", "~> 1.6.3"
+  gem.add_dependency "rest-client", "~> 1.6.3"
   gem.add_dependency "nokogiri",    "~> 1.5.0"
   
   gem.add_development_dependency "rspec", "~> 2.6"
