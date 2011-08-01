@@ -88,7 +88,7 @@ module Hexillion
         :updated_date => './UpdatedDate'
       }
       
-      result = {}
+      result = { :xml_response => xml }
       
       records.each do |record|
         result[:nameservers] = record.css('Domain NameServer').map { |x| x.content unless x.content == '' }

@@ -77,5 +77,19 @@ describe Hexillion::Client do
       
       @hex.whois("example.com")[:created_date].should == DateTime::civil(1999,10,4)
     end
+    
+    it "returns the entire xml response as :xml_response" do
+      xml = <<-XML        
+            <QueryResult><ErrorCode>Success</ErrorCode><WhoisRecord>
+              <CreatedDate>1999-10-04T00:00:00Z</CreatedDate>
+              <UpdatedDate>2010-11-25T00:00:00Z</UpdatedDate>
+              <ExpiresDate>2019-10-04T00:00:00Z</ExpiresDate>
+            </WhoisRecord></QueryResult>
+            XML
+            
+      @response.stub(:body) { xml }
+      
+      @hex.whois("example.com")[:xml_response].should == xml
+    end
   end
 end
