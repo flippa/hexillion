@@ -23,8 +23,8 @@ The return value is a hash with all the Whois data returned by the API.
 
 ## Resources
 
-  - [Source](https://github.com/flippa/quova)
-  - [Issues](https://github.com/flippa/quova/issues)
+  - [Source](https://github.com/flippa/hexillion)
+  - [Issues](https://github.com/flippa/hexillion/issues)
 
 ## Disclaimer
 
