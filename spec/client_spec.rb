@@ -36,7 +36,7 @@ describe Hexillion::Client do
     it "concats multiline address fields" do
       @response.stub(:body) do
         <<-XML
-        <QueryResult><ErrorCode>Success</ErrorCode><WhoisRecord>
+        <QueryResult><ErrorCode>Success</ErrorCode><FoundMatch>Yes</FoundMatch><WhoisRecord>
           <Registrant>
             <Address>48 Cambridge Street</Address>
             <Address>Level 3</Address>
@@ -51,7 +51,7 @@ describe Hexillion::Client do
     it "makes an array of nameservers" do
       @response.stub(:body) do
         <<-XML        
-        <QueryResult><ErrorCode>Success</ErrorCode><WhoisRecord>
+        <QueryResult><ErrorCode>Success</ErrorCode><FoundMatch>Yes</FoundMatch><WhoisRecord>
           <Domain>
             <NameServer>ns1.registrar.com</NameServer>
             <NameServer>ns2.registrar.com</NameServer>
@@ -67,7 +67,7 @@ describe Hexillion::Client do
     it "parses date fields" do
       @response.stub(:body) do
         <<-XML        
-        <QueryResult><ErrorCode>Success</ErrorCode><WhoisRecord>
+        <QueryResult><ErrorCode>Success</ErrorCode><FoundMatch>Yes</FoundMatch><WhoisRecord>
           <CreatedDate>1999-10-04T00:00:00Z</CreatedDate>
           <UpdatedDate>2010-11-25T00:00:00Z</UpdatedDate>
           <ExpiresDate>2019-10-04T00:00:00Z</ExpiresDate>
@@ -80,7 +80,7 @@ describe Hexillion::Client do
     
     it "returns the entire xml response as :xml_response" do
       xml = <<-XML        
-            <QueryResult><ErrorCode>Success</ErrorCode><WhoisRecord>
+        <QueryResult><ErrorCode>Success</ErrorCode><FoundMatch>Yes</FoundMatch><WhoisRecord>
               <CreatedDate>1999-10-04T00:00:00Z</CreatedDate>
               <UpdatedDate>2010-11-25T00:00:00Z</UpdatedDate>
               <ExpiresDate>2019-10-04T00:00:00Z</ExpiresDate>
