@@ -42,6 +42,7 @@ module Hexillion
         :registrant_postal_code => "Registrant PostalCode",
         :registrant_country => "Registrant Country",
         :registrant_country_code => "Registrant CountryCode",
+        :registrant_email => "Registrant Email",
         :registrar_name => "Registrar Name",
         :registrar_whois_server => "Registrar WhoisServer",
         :registrar_homepage => "Registrar HomePage",

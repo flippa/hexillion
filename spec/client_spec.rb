@@ -47,6 +47,22 @@ describe Hexillion::Client do
       
       @hex.whois("example.com")[:registrant_address].should == "48 Cambridge Street\nLevel 3"
     end
+
+    it "provides the registrant email address" do
+      @response.stub(:body) do
+        <<-XML
+        <QueryResult><ErrorCode>Success</ErrorCode><FoundMatch>Yes</FoundMatch><WhoisRecord>
+          <Registrant>
+            <Address>48 Cambridge Street</Address>
+            <Address>Level 3</Address>
+            <Email>me@example.com</Email>
+          </Registrant>
+        </WhoisRecord></QueryResult>
+        XML
+      end
+     
+      @hex.whois("example.com")[:registrant_email].should == "me@example.com"
+    end
     
     it "makes an array of nameservers" do
       @response.stub(:body) do
