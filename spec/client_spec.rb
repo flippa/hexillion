@@ -63,6 +63,21 @@ describe Hexillion::Client do
      
       @hex.whois("example.com")[:registrant_email].should == "me@example.com"
     end
+
+    it "returns the first email when multiple specified" do
+      @response.stub(:body) do
+        <<-XML
+        <QueryResult><ErrorCode>Success</ErrorCode><FoundMatch>Yes</FoundMatch><WhoisRecord>
+          <AdminContact>
+            <Email>john@example.com</Email>
+            <Email>fred@example.com</Email>
+          </AdminContact>
+        </WhoisRecord></QueryResult>
+        XML
+      end
+      
+      @hex.whois("example.com")[:admin_contact_email].should == "john@example.com"
+    end
     
     it "makes an array of nameservers" do
       @response.stub(:body) do

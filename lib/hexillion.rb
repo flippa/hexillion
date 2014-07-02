@@ -98,7 +98,7 @@ module Hexillion
         strings.each do | attr, selector |
           nodes = record.css(selector)
           next if nodes.empty?
-          if nodes.size == 1
+          if nodes.size == 1 || selector.include?('Email')
             result[attr] = nodes[0].content unless nodes[0].content == ''
           else
             result[attr] = nodes.to_a.reject { |s| s.blank? }.join("\n")
