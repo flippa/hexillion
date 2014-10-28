@@ -18,7 +18,7 @@ describe Hexillion::Client do
       hex.instance_variable_get('@session_key').should == 'nOIANdfjL4524ynjlssasjfDFaqe4'
     end
   end
-  
+
   describe "#whois" do
     before(:each) do
       @response = double()
@@ -27,12 +27,25 @@ describe Hexillion::Client do
       @response.stub(:body) { "" }
       @hex = Hexillion::Client.new(:username => "username", :password => "password")
     end
-    
-    it "queries the API for the provided domain" do
-      RestClient.should_receive(:get)
-      @hex.whois("example.com")
+
+    it "queries the API and passes all the params to the endpoint" do
+      domain_name = "example.com"
+      extra_params = {:data => "awesome", :more_data => "awesomer"}
+      endpoint_url = kind_of(String)
+      sessionkey = kind_of(String)
+
+      payload = [
+        endpoint_url,
+        :params => {
+          :sessionkey => sessionkey,
+          :query => domain_name
+        }.merge(extra_params)
+      ]
+
+      expect(RestClient).to receive(:get).with(*payload)
+      @hex.whois(domain_name, extra_params)
     end
-    
+
     it "concats multiline address fields" do
       @response.stub(:body) do
         <<-XML
@@ -44,7 +57,7 @@ describe Hexillion::Client do
         </WhoisRecord></QueryResult>
         XML
       end
-      
+
       @hex.whois("example.com")[:registrant_address].should == "48 Cambridge Street\nLevel 3"
     end
 
@@ -60,7 +73,7 @@ describe Hexillion::Client do
         </WhoisRecord></QueryResult>
         XML
       end
-     
+
       @hex.whois("example.com")[:registrant_email].should == "me@example.com"
     end
 
@@ -75,13 +88,13 @@ describe Hexillion::Client do
         </WhoisRecord></QueryResult>
         XML
       end
-      
+
       @hex.whois("example.com")[:admin_contact_email].should == "john@example.com"
     end
-    
+
     it "makes an array of nameservers" do
       @response.stub(:body) do
-        <<-XML        
+        <<-XML
         <QueryResult><ErrorCode>Success</ErrorCode><FoundMatch>Yes</FoundMatch><WhoisRecord>
           <Domain>
             <NameServer>ns1.registrar.com</NameServer>
@@ -91,35 +104,35 @@ describe Hexillion::Client do
         </WhoisRecord></QueryResult>
         XML
       end
-      
+
       @hex.whois("example.com")[:nameservers].should == ['ns1.registrar.com', 'ns2.registrar.com', 'ns3.registrar.com']
     end
 
     it "parses date fields" do
       @response.stub(:body) do
-        <<-XML        
+        <<-XML
         <QueryResult><ErrorCode>Success</ErrorCode><FoundMatch>Yes</FoundMatch><WhoisRecord>
           <CreatedDate>1999-10-04T00:00:00Z</CreatedDate>
           <UpdatedDate>2010-11-25T00:00:00Z</UpdatedDate>
           <ExpiresDate>2019-10-04T00:00:00Z</ExpiresDate>
         </WhoisRecord></QueryResult>
         XML
-      end  
-      
+      end
+
       @hex.whois("example.com")[:created_date].should == DateTime::civil(1999,10,4)
     end
-    
+
     it "returns the entire xml response as :xml_response" do
-      xml = <<-XML        
+      xml = <<-XML
         <QueryResult><ErrorCode>Success</ErrorCode><FoundMatch>Yes</FoundMatch><WhoisRecord>
               <CreatedDate>1999-10-04T00:00:00Z</CreatedDate>
               <UpdatedDate>2010-11-25T00:00:00Z</UpdatedDate>
               <ExpiresDate>2019-10-04T00:00:00Z</ExpiresDate>
             </WhoisRecord></QueryResult>
             XML
-            
+
       @response.stub(:body) { xml }
-      
+
       @hex.whois("example.com")[:xml_response].should == xml
     end
   end

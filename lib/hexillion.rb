@@ -13,25 +13,28 @@ module Hexillion
         raise "Authentication failed"
       end
     end
-    
+
     # Query the API for a given domain
-    # 
-    # @example 
-    #   client.whois('flippa.com') # => { ... }
-    # 
-    #  
-    
-    def whois(domain)
-      response = RestClient.get "http://hexillion.com/rf/xml/1.0/whois/", :params => {:sessionkey => @session_key, :query => domain}
+    #
+    # @example
+    #   client.whois('flippa.com', {optional_param: value, ...}) # => { ... }
+    #
+    #
+
+    def whois(domain, extra_params = {})
+      base_params = {:sessionkey => @session_key, :query => domain}
+      params = base_params.merge(extra_params)
+
+      response = RestClient.get "http://hexillion.com/rf/xml/1.0/whois/", :params => params
       parse_xml(response.body)
     end
-    
+
     private
-    
+
     def parse_xml(xml)
       doc = Nokogiri::XML(xml)
       records = doc.xpath(".//QueryResult[ErrorCode='Success' and FoundMatch='Yes']/WhoisRecord")
-  
+
       strings = {
         :registrant_name => "Registrant Name",
         :registrant_person => "Registrant Person",
@@ -83,18 +86,18 @@ module Hexillion
         :stripped_text => "StrippedText",
         :raw_text => "RawText"
       }
-      
+
       dates = {
         :created_date => './CreatedDate',
         :expires_date => './ExpiresDate',
         :updated_date => './UpdatedDate'
       }
-      
+
       result = { :xml_response => xml }
-      
+
       records.each do |record|
         result[:nameservers] = record.css('Domain NameServer').map { |x| x.content unless x.content == '' }
-        
+
         strings.each do | attr, selector |
           nodes = record.css(selector)
           next if nodes.empty?
@@ -104,13 +107,13 @@ module Hexillion
             result[attr] = nodes.to_a.reject { |s| s.blank? }.join("\n")
           end
         end
-        
+
         dates.each do | attr, selector |
           next unless node = record.at_xpath(selector)
           result[attr] = DateTime.parse(node.content) unless node.content == ''
         end
       end
-      
+
       result
     end
   end
