@@ -18,7 +18,7 @@ describe Hexillion::Client do
       hex.instance_variable_get('@session_key').should == 'nOIANdfjL4524ynjlssasjfDFaqe4'
     end
   end
-  
+
   describe "#whois" do
     before(:each) do
       @response = double()
@@ -32,7 +32,7 @@ describe Hexillion::Client do
       RestClient.should_receive(:get)
       @hex.whois("example.com")
     end
-    
+
     it "concats multiline address fields" do
       @response.stub(:body) do
         <<-XML
@@ -44,7 +44,7 @@ describe Hexillion::Client do
         </WhoisRecord></QueryResult>
         XML
       end
-      
+
       @hex.whois("example.com")[:registrant_address].should == "48 Cambridge Street\nLevel 3"
     end
 
@@ -60,7 +60,7 @@ describe Hexillion::Client do
         </WhoisRecord></QueryResult>
         XML
       end
-     
+
       @hex.whois("example.com")[:registrant_email].should == "me@example.com"
     end
 
@@ -75,13 +75,13 @@ describe Hexillion::Client do
         </WhoisRecord></QueryResult>
         XML
       end
-      
+
       @hex.whois("example.com")[:admin_contact_email].should == "john@example.com"
     end
-    
+
     it "makes an array of nameservers" do
       @response.stub(:body) do
-        <<-XML        
+        <<-XML
         <QueryResult><ErrorCode>Success</ErrorCode><FoundMatch>Yes</FoundMatch><WhoisRecord>
           <Domain>
             <NameServer>ns1.registrar.com</NameServer>
@@ -91,35 +91,35 @@ describe Hexillion::Client do
         </WhoisRecord></QueryResult>
         XML
       end
-      
+
       @hex.whois("example.com")[:nameservers].should == ['ns1.registrar.com', 'ns2.registrar.com', 'ns3.registrar.com']
     end
 
     it "parses date fields" do
       @response.stub(:body) do
-        <<-XML        
+        <<-XML
         <QueryResult><ErrorCode>Success</ErrorCode><FoundMatch>Yes</FoundMatch><WhoisRecord>
           <CreatedDate>1999-10-04T00:00:00Z</CreatedDate>
           <UpdatedDate>2010-11-25T00:00:00Z</UpdatedDate>
           <ExpiresDate>2019-10-04T00:00:00Z</ExpiresDate>
         </WhoisRecord></QueryResult>
         XML
-      end  
-      
+      end
+
       @hex.whois("example.com")[:created_date].should == DateTime::civil(1999,10,4)
     end
-    
+
     it "returns the entire xml response as :xml_response" do
-      xml = <<-XML        
+      xml = <<-XML
         <QueryResult><ErrorCode>Success</ErrorCode><FoundMatch>Yes</FoundMatch><WhoisRecord>
               <CreatedDate>1999-10-04T00:00:00Z</CreatedDate>
               <UpdatedDate>2010-11-25T00:00:00Z</UpdatedDate>
               <ExpiresDate>2019-10-04T00:00:00Z</ExpiresDate>
             </WhoisRecord></QueryResult>
             XML
-            
+
       @response.stub(:body) { xml }
-      
+
       @hex.whois("example.com")[:xml_response].should == xml
     end
   end
