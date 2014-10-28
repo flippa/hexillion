@@ -27,10 +27,23 @@ describe Hexillion::Client do
       @response.stub(:body) { "" }
       @hex = Hexillion::Client.new(:username => "username", :password => "password")
     end
-    
-    it "queries the API for the provided domain" do
-      RestClient.should_receive(:get)
-      @hex.whois("example.com")
+
+    it "queries the API and passes all the params to the endpoint" do
+      domain_name = "example.com"
+      extra_params = {:data => "awesome", :more_data => "awesomer"}
+      endpoint_url = kind_of(String)
+      sessionkey = kind_of(String)
+
+      payload = [
+        endpoint_url,
+        :params => {
+          :sessionkey => sessionkey,
+          :query => domain_name
+        }.merge(extra_params)
+      ]
+
+      expect(RestClient).to receive(:get).with(*payload)
+      @hex.whois(domain_name, extra_params)
     end
 
     it "concats multiline address fields" do

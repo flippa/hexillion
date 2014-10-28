@@ -15,14 +15,17 @@ module Hexillion
     end
 
     # Query the API for a given domain
-    # 
-    # @example 
-    #   client.whois('flippa.com') # => { ... }
-    # 
-    #  
-    
-    def whois(domain)
-      response = RestClient.get "http://hexillion.com/rf/xml/1.0/whois/", :params => {:sessionkey => @session_key, :query => domain}
+    #
+    # @example
+    #   client.whois('flippa.com', {optional_param: value, ...}) # => { ... }
+    #
+    #
+
+    def whois(domain, extra_params = {})
+      base_params = {:sessionkey => @session_key, :query => domain}
+      params = base_params.merge(extra_params)
+
+      response = RestClient.get "http://hexillion.com/rf/xml/1.0/whois/", :params => params
       parse_xml(response.body)
     end
 
