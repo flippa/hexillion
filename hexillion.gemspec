@@ -12,6 +12,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency "nokogiri",    "~> 1.5.0"
 
   gem.add_development_dependency "rspec", "~> 2.6"
+  gem.add_development_dependency "rake"
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   gem.files         = `git ls-files`.split("\n")
