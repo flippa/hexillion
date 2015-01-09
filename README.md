@@ -1,5 +1,7 @@
 # Hexillion API Client Gem for Ruby
 
+[![Build Status](https://travis-ci.org/flippa/hexillion.svg?branch=master)](https://travis-ci.org/flippa/hexillion)
+
 This gem provides a basic Ruby wrapper for the
 [Hexillion Whois API](http://hexillion.com/whois/).
 It is largely based on the [Quova gem](http://github.com/d11wtq/quova/) by Chris Corbyn.
