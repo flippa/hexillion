@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.homepage      = ''
 
   gem.add_dependency "rest-client", "~> 1.7"
-  gem.add_dependency "nokogiri",    "~> 1.5.0"
+  gem.add_dependency "nokogiri",    ">= 1.5"
 
   gem.add_development_dependency "rspec", "~> 2.6"
   gem.add_development_dependency "rake"
