@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["developers@flippa.com"]
   gem.description   = %q{Hexillion WhoIs API Client for Ruby}
   gem.summary       = %q{Provides a simple client for the Hexillion API}
-  gem.homepage      = ''
+  gem.homepage      = 'https://github.com/flippa/hexillion'
 
   gem.add_dependency "nokogiri", ">= 1.5"
 
