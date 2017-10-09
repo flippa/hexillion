@@ -54,9 +54,9 @@ module Hexillion
       doc = Nokogiri::XML(xml)
 
       records = doc.xpath(
-        <<~XPATH
+        <<-XPATH
           .//QueryResult[
-            ErrorCode='Success' and
+            (ErrorCode='Success' or ErrorCode='ParseFailed') and
             FoundMatch='Yes'
           ]/WhoisRecord
         XPATH

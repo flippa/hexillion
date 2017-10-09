@@ -1,3 +1,6 @@
+# 1.4.0
+* Allow error code 'ParseFailed' in response.
+
 # 1.3.0
 
 * Replace rest-client usage with net/http.

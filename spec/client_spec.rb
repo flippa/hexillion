@@ -134,5 +134,19 @@ describe Hexillion::Client do
 
       expect(@hex.whois("example.com")[:xml_response]).to eq(xml)
     end
+
+    it "allows error code 'ParseFailed' in response" do
+      @response_body = <<-XML
+        <QueryResult><ErrorCode>ParseFailed</ErrorCode><FoundMatch>Yes</FoundMatch><WhoisRecord>
+          <Registrant>
+            <Address>48 Cambridge Street</Address>
+            <Address>Level 3</Address>
+            <Email>me@example.com</Email>
+          </Registrant>
+        </WhoisRecord></QueryResult>
+      XML
+
+      expect(@hex.whois("example.com")[:registrant_email]).to eq("me@example.com")
+    end
   end
 end
