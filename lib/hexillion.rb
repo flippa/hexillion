@@ -52,7 +52,15 @@ module Hexillion
 
     def parse_xml(xml)
       doc = Nokogiri::XML(xml)
-      records = doc.xpath(".//QueryResult[ErrorCode='Success' and FoundMatch='Yes']/WhoisRecord")
+
+      records = doc.xpath(
+        <<-XPATH
+          .//QueryResult[
+            (ErrorCode='Success' or ErrorCode='ParseFailed') and
+            FoundMatch='Yes'
+          ]/WhoisRecord
+        XPATH
+      )
 
       strings = {
         registrant_name: "Registrant Name",
